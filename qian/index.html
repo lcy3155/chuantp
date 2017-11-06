@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>-->
+
+    <script type="text/javascript" src="../../js/jquery-1.11.3.js"></script>
+</head>
+<body>
+<input type="file" onchange="setFiles(this)" multiple="multiple" name="file">
+<button>注册</button>
+<div class="photo"></div>
+<script type="text/javascript">
+    //第一步
+    var files
+    var setFiles=function(element){
+        console.log(element.files)
+        files=element.files
+    }
+     //第二部
+    $('button').click(function(){
+        var fd=new FormData();  //表单处理数据的方法  创建一个表单对象，用来处理表单属性
+
+        for(var i=0;i<files.length;i++){
+            fd.append('file',files[i])    //用append方法以键值对的方式保存
+            //遍历第一步取的属性，
+           // console.log(fd)
+        }
+        $.ajax({
+            type:"POST",
+            url:"http://localhost:3000/item/list",
+            async:true,
+            data:fd,
+            contentType:false,   //取消默认类型
+            processData:false,   //取消默认路径
+            success:function(e){
+                console.log(e)
+            }
+        });
+    })
+
+
+    //获取图片
+     $.ajax({
+         type:"POST",
+         url:"http://localhost:3000/item/list1",
+         success:function(e){
+             console.log(e)
+             for(var i=0;i<e.length;i++){
+                 $('.photo').append('<img src="../backend/public/'+e[i].img+'">')
+             }
+         }
+     });
+
+
+</script>
+
+
+</body>
+</html>
